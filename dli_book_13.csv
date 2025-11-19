@@ -1,0 +1,216 @@
+term,type,example
+"Replace that-clause with so or not",grammar,"Will it rain? I believe so. | I hope not."
+"Certainty expressions with that-clause",grammar,"I am certain that it will rain. | I'm positive that she knows."
+certain,adjective,I am certain that we will win.
+positive,adjective,I'm positive that he told me.
+sure,adjective,Are you sure about that?
+uncertain,adjective,I am uncertain about the decision.
+"Superlative adverbs",grammar,"She runs fastest. | He arrived earliest."
+earliest,adverb,He arrived earliest.
+farthest,adverb,She threw the ball farthest.
+furthest,adverb,They traveled furthest.
+fastest,adverb,Who runs fastest?
+hardest,adverb,I worked hardest on this project.
+highest,adverb,The plane flew highest.
+latest,adverb,He stayed latest.
+lowest,adverb,The price dropped lowest in winter.
+nearest,adverb,We live nearest to the school.
+slowest,adverb,She walks slowest.
+soonest,adverb,Who can arrive soonest?
+straightest,adverb,He threw straightest.
+"Permission with could",grammar,"Could I borrow your pen? | You can use it. | No, you can't."
+could,modal,Could I leave early today?
+can,modal,You can go now.
+can't,modal,You can't park here.
+"Modals for possibility",grammar,"It may rain. | She might come. | It could happen."
+may,modal,It may be true.
+might,modal,She might visit tomorrow.
+"Noun adjuncts and compound nouns",grammar,shoe shop | bookstore | football player
+bookstore,noun,The bookstore is on Main Street.
+"Separable phrasal verbs",grammar,"I'll wake you up. | Please turn the TV off."
+wake up,phrasal_verb,I wake up at 7 a.m. every day.
+woke up,phrasal_verb,I woke up late this morning.
+woken up,phrasal_verb,Have you woken up yet?
+turn off,phrasal_verb,Please turn off the lights.
+put out,phrasal_verb,Put out your cigarette.
+throw away,phrasal_verb,Don't throw away that paper.
+threw away,phrasal_verb,I threw away the old magazines.
+thrown away,phrasal_verb,It should have been thrown away.
+throw out,phrasal_verb,Throw out the trash.
+threw out,phrasal_verb,He threw out the leftovers.
+thrown out,phrasal_verb,The papers were thrown out.
+do over,phrasal_verb,You need to do over this assignment.
+did over,phrasal_verb,I did over my homework.
+done over,phrasal_verb,The room has been done over.
+"Reported speech with modals",grammar,"She said she might come. | He told me he could help."
+said,verb,She said she was tired.
+told,verb,He told me about the meeting.
+"Verb plus er/or for agent nouns",grammar,"teach → teacher | visit → visitor"
+teacher,noun,My teacher is very kind.
+visitor,noun,We have a visitor today.
+player,noun,He's a good basketball player.
+reporter,noun,The reporter asked many questions.
+coach,noun,Our coach trains us every day.
+"Questions with How plus adjective",grammar,"How tall are you? | How old is she? | How heavy is it?"
+how tall,phrase,How tall are you?
+how old,phrase,How old is your brother?
+how heavy,phrase,How heavy is this box?
+how long,phrase,How long is the river?
+how wide,phrase,How wide is the street?
+"Simple present if clause with present tense",grammar,"If it rains, we stay inside. | If you heat water, it boils."
+if,conjunction,If you want to come with us.
+"Simple present if clause with imperative",grammar,"If you see her, tell her I called. | If it rains, bring an umbrella."
+"Indefinite pronouns and quantifiers",grammar,"a few students | a little water | many people | some help"
+a few,quantifier,I have a few questions.
+a little,quantifier,Add a little salt.
+a lot,quantifier,There are a lot of people here.
+any,quantifier,Do you have any money?
+many,quantifier,Many students passed the test.
+much,quantifier,How much does it cost?
+none,pronoun,None of them came.
+some,quantifier,I need some help.
+quite,adverb,It's quite expensive.
+away,adverb,Go away!
+fond,adjective,I'm fond of chocolate.
+man-made,adjective,This is a man-made lake.
+natural,adjective,It's made from natural materials.
+past,noun,In the past we lived in the city.
+free,adjective,The concert is free.
+irregular,adjective,This verb is irregular.
+less,adverb,It costs less than before.
+medium,adjective,I need a medium size.
+special,adjective,This is a special day.
+weigh,verb,How much do you weigh?
+fat,adjective,The cat is getting fat.
+thick,adjective,The book has thick pages.
+thin,adjective,She is very thin.
+certainly,adverb,I will certainly help you.
+surely,adverb,Surely you can do it!
+doubt,noun,I have no doubt about it.
+doubt,verb,I doubt it will rain.
+field,noun,The children play in the field.
+goal,noun,Our goal is to win.
+jump,noun,He made a big jump.
+jump,verb,Can you jump over this?
+knot,noun,Tie a knot in the rope.
+match,noun,We watched the football match.
+match,verb,These colors match well.
+meaning,noun,What is the meaning of this word?
+meter,noun,The pool is 10 meters long.
+point,noun,Our team scored 20 points.
+practice,noun,We have practice after school.
+race,noun,Who won the race?
+race,verb,Let's race to the corner.
+rope,noun,Pull on the rope.
+score,noun,What was the final score?
+score,verb,Did you score a goal?
+shoelaces,noun,Tie your shoelaces.
+stadium,noun,The stadium holds 50000 people.
+string,noun,I need some string to wrap this.
+tie,noun,He's wearing a red tie.
+tie,verb,Tie your shoes.
+ashtray,noun,Please use the ashtray.
+bracelet,noun,She wears a gold bracelet.
+chain,noun,The dog is on a chain.
+copper,noun,This pipe is made of copper.
+cotton,noun,I prefer cotton shirts.
+diamond,noun,She has a diamond ring.
+earrings,noun,Those earrings are beautiful.
+glass,noun,The window is made of glass.
+gold,noun,This necklace is gold.
+iron,noun,The gate is made of iron.
+jewelry,noun,She loves expensive jewelry.
+leather,noun,These shoes are leather.
+leave,noun,He is on leave from work.
+material,noun,What material is this made of?
+metal,noun,The frame is metal.
+necklace,noun,She bought a silver necklace.
+nylon,noun,These stockings are nylon.
+plastic,noun,Don't use plastic bags.
+polyester,noun,This shirt is polyester.
+ring,noun,He gave her an engagement ring.
+rock,noun,They climbed over the rocks.
+rubber,noun,The ball is made of rubber.
+silk,noun,She wore a silk dress.
+silver,noun,This spoon is silver.
+stone,noun,The house is built of stone.
+wool,noun,This sweater is pure wool.
+amount,noun,What amount do you need?
+amount to,phrasal_verb,The total amounts to fifty dollars.
+bargain,noun,This shirt is a real bargain.
+bargain,verb,We bargained for a lower price.
+cloth,noun,Wipe it with a cloth.
+deal,noun,That's a good deal!
+discount,noun,They're offering a 20% discount.
+discount,verb,They discounted all the prices.
+distance,noun,What is the distance from here?
+dressing room,phrase,The dressing room is over there.
+fabric,noun,Choose a fabric you like.
+hip,noun,She hurt her hip.
+inch,noun,It's six inches long.
+item,noun,Check each item on the list.
+pair,noun,I bought a pair of shoes.
+percent,noun,Fifty percent of students passed.
+receipt,noun,Keep your receipt.
+sale,noun,The store is having a sale.
+size,noun,What size do you wear?
+tax,noun,The tax is included.
+waste,noun,Don't waste water.
+age,noun,What is your age?
+centimeter,noun,It's 30 centimeters wide.
+depth,noun,What is the depth of the pool?
+diet,noun,I'm on a diet.
+diet,verb,She's been dieting for a month.
+foot,noun,It's two feet long.
+feet,noun,My feet hurt.
+height,noun,What is your height?
+kilometer,noun,It's five kilometers away.
+length,noun,What is the length?
+mile,noun,It's ten miles from here.
+millimeter,noun,It's 5 millimeters thick.
+scale,noun,Stand on the scale.
+strength,noun,He has great strength.
+weight,noun,What is your weight?
+width,noun,Measure the width.
+yard,noun,The garden is 20 yards long.
+gain,verb,I gained five pounds.
+measure,verb,Please measure this.
+beat,verb,Our team beat theirs.
+beaten,verb,We were beaten last week.
+believe,verb,I believe you.
+imagine,verb,Can you imagine living there?
+join,verb,Will you join us?
+kick,verb,Don't kick the ball inside.
+lose,verb,Don't lose your keys.
+lost,verb,I lost my wallet.
+suppose,verb,I suppose you're right.
+throw,verb,Throw me the ball.
+threw,verb,He threw it over the fence.
+thrown,verb,The ball was thrown high.
+win,verb,We want to win the game.
+won,verb,They won the match.
+allow,verb,They don't allow smoking here.
+appreciate,verb,I appreciate your help.
+be made of,phrase,This table is made of wood.
+owe,verb,I owe you ten dollars.
+pay back,phrasal_verb,I'll pay you back tomorrow.
+paid back,phrasal_verb,I paid him back last week.
+decrease,verb,Prices decreased last month.
+fit,verb,Do these shoes fit?
+increase,verb,Prices will increase soon.
+reduce,verb,We need to reduce costs.
+sew,verb,Can you sew this button?
+sewed,verb,She sewed a new dress.
+sewn,verb,The hem was sewn by hand.
+try on,phrasal_verb,Can I try on this jacket?
+most,adverb,She likes this one most.
+so,adverb,Don't be so loud!
+towards,preposition,Walk towards the door.
+off,adverb,Turn off the light.
+on a diet,phrase,I'm on a diet right now.
+for sure,phrase,I know that for sure.
+for sale,phrase,Is this house for sale?
+on sale,phrase,These items are on sale.
+sales,noun,The sales were very high.
+by,preposition,Come by 5 o'clock.
+shoe shop,phrase,I bought these at the shoe shop.
