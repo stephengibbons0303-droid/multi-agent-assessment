@@ -59,7 +59,20 @@ st.markdown("""
         background: linear-gradient(90deg, #d97706 0%, #f97316 100%) !important;
         color: #112f38 !important;
     }
+    .stButton>button p {
+        color: #112f38 !important;
+    }
+    .stButton>button span {
+        color: #112f38 !important;
+    }
+    .stButton>button div {
+        color: #112f38 !important;
+    }
+    .stButton button {
+        color: #112f38 !important;
+    }
     p, label, .stMarkdown { color: #99f6e4 !important; }
+    .stButton p, .stButton label, .stButton .stMarkdown { color: #112f38 !important; }
     hr { border-color: rgba(20, 184, 166, 0.3) !important; }
     .stTabs [data-baseweb="tab-list"] {
         gap: 8px;
