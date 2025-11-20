@@ -48,7 +48,7 @@ st.markdown("""
     }
     .stButton>button {
         background: linear-gradient(90deg, #f59e0b 0%, #fb923c 100%) !important;
-        color: #0f172a !important;
+        color: #112f38 !important;
         border: none !important;
         border-radius: 16px !important;
         padding: 12px 24px !important;
@@ -57,7 +57,7 @@ st.markdown("""
     }
     .stButton>button:hover {
         background: linear-gradient(90deg, #d97706 0%, #f97316 100%) !important;
-        color: #0f172a !important;
+        color: #112f38 !important;
     }
     p, label, .stMarkdown { color: #99f6e4 !important; }
     hr { border-color: rgba(20, 184, 166, 0.3) !important; }
