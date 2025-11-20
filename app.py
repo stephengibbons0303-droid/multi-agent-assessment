@@ -37,9 +37,18 @@ st.markdown("""
         border-radius: 16px !important;
         padding: 20px !important;
     }
+    .stFileUploader label {
+        color: #ffffff !important;
+    }
+    .stFileUploader section {
+        color: #ffffff !important;
+    }
+    .stFileUploader small {
+        color: #ffffff !important;
+    }
     .stButton>button {
         background: linear-gradient(90deg, #f59e0b 0%, #fb923c 100%) !important;
-        color: white !important;
+        color: #0f172a !important;
         border: none !important;
         border-radius: 16px !important;
         padding: 12px 24px !important;
@@ -48,6 +57,7 @@ st.markdown("""
     }
     .stButton>button:hover {
         background: linear-gradient(90deg, #d97706 0%, #f97316 100%) !important;
+        color: #0f172a !important;
     }
     p, label, .stMarkdown { color: #99f6e4 !important; }
     hr { border-color: rgba(20, 184, 166, 0.3) !important; }
@@ -63,6 +73,18 @@ st.markdown("""
     .stTabs [aria-selected="true"] {
         background-color: rgba(20, 184, 166, 0.2);
         color: #5eead4;
+    }
+    .stInfo {
+        background-color: rgba(20, 184, 166, 0.15) !important;
+    }
+    .stInfo p {
+        color: #ffffff !important;
+    }
+    .stSuccess {
+        background-color: rgba(20, 184, 166, 0.15) !important;
+    }
+    .stSuccess p {
+        color: #ffffff !important;
     }
 </style>
 """, unsafe_allow_html=True)
