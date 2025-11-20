@@ -346,6 +346,9 @@ with tab1:
         vocab_scanner, grammar_scanner = subagents
         
         try:
+            # Calculate word count for Task Achievement scoring
+            word_count = len(response.split())
+            
             # Run sub-agents first if DLI mode is active
             vocab_scan_results = None
             grammar_scan_results = None
@@ -359,7 +362,7 @@ with tab1:
                 asyncio.to_thread(lc_agent.assess, response, feedback_level, grammar_scan_results),
                 asyncio.to_thread(coh_agent.assess, response, feedback_level),
                 asyncio.to_thread(lex_agent.assess, response, feedback_level, vocab_scan_results, assessment_mode),
-                asyncio.to_thread(task_agent.assess, response, prompt, feedback_level),
+                asyncio.to_thread(task_agent.assess, response, prompt, feedback_level, word_count),
                 return_exceptions=True
             )
             
@@ -772,13 +775,19 @@ with tab2:
                     if selected_module == 'Coherence and Cohesion':
                         result = agent.assess(response, feedback_level)
                     else:
-                        result = agent.assess(response, prompt, feedback_level)
+                        # Calculate word count for Task Achievement
+                        word_count = len(response.split())
+                        result = agent.assess(response, prompt, feedback_level, word_count)
                     
                     output = {
                         'Student_ID': student_id,
                         'Score': result['score'],
                         'Feedback': result.get('feedback', '')
                     }
+                    
+                    # Add word count to output for Task Achievement
+                    if selected_module == 'Task Achievement':
+                        output['Word_Count'] = word_count
                 
                 elif selected_module == 'Verifier':
                     # For verifier, we need mock scores to test
