@@ -271,7 +271,7 @@ with tab1:
     feedback_options = {
         'A': 'Score only',
         'B': 'Brief feedback',
-        'C': 'Detailed feedback',
+        'C': 'Dtld feedback',
         'D': 'Full breakdown'
     }
     
@@ -282,7 +282,7 @@ with tab1:
         if st.button("**B**\n\nBrief feedback", use_container_width=True, key='tab1_fb_b'):
             st.session_state.feedback_level = 'B'
     with col3:
-        if st.button("**C**\n\nDetailed feedback", use_container_width=True, key='tab1_fb_c'):
+        if st.button("**C**\n\nDtld feedback", use_container_width=True, key='tab1_fb_c'):
             st.session_state.feedback_level = 'C'
     with col4:
         if st.button("**D**\n\nFull breakdown", use_container_width=True, key='tab1_fb_d'):
