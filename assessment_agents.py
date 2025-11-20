@@ -323,11 +323,16 @@ BONUS_EXPLANATION: [brief note on which terms earned credit]
 class TaskAchievementAgent(AssessmentAgent):
     """Assesses how well the response addresses the prompt (40% weight)"""
     
-    def assess(self, response: str, prompt: str, feedback_level: str) -> Dict:
+    def assess(self, response: str, prompt: str, feedback_level: str, word_count: int = None) -> Dict:
+        # Calculate word count if not provided
+        if word_count is None:
+            word_count = len(response.split())
+        
         assessment_prompt = f"""Assess the TASK ACHIEVEMENT of this A2/B1 level written response.
 
 Prompt: "{prompt}"
 Response: "{response}"
+Word Count: {word_count}
 
 Evaluate based on:
 - Does it answer the question/prompt?
@@ -336,9 +341,15 @@ Evaluate based on:
 - Development of ideas
 - Appropriate length
 
+LENGTH CONSIDERATIONS:
+- Responses under 10 words: Severely inadequate, maximum score 10/40
+- Responses 10-19 words: Minimal development, maximum score 20/40
+- Responses 20-65 words: Appropriate length range, score on content merit
+- Responses over 65 words: Evaluate whether excessive length impairs clarity or focus
+
 Provide a score from 0-40 where:
-- 0-10: Minimal response, doesn't address prompt
-- 11-20: Partially addresses prompt, limited development
+- 0-10: Minimal response, doesn't address prompt, or severely too brief
+- 11-20: Partially addresses prompt, limited development, or inadequate length
 - 21-30: Fully addresses prompt with adequate development
 - 31-40: Comprehensive response with well-developed ideas
 
@@ -351,6 +362,12 @@ SCORE: [number 0-40]
         
         result = self.call_gpt(assessment_prompt)
         score = self._extract_score_range(result, 0, 40)
+        
+        # Apply hard caps based on word count
+        if word_count < 10:
+            score = min(score, 10)
+        elif word_count < 20:
+            score = min(score, 20)
         
         feedback = ""
         if feedback_level in ['B', 'C', 'D']:
