@@ -404,10 +404,18 @@ with tab1:
                 'Overall_Score': round(overall_score, 1)
             }
             
+            
             if feedback_level == 'A':
                 pass  # Just overall score
             
             elif feedback_level == 'B':
+                # Add individual criterion scores
+                result['Language_Control'] = lc_result.get('total_score', lc_result.get('score', 0))
+                result['Coherence'] = coh_result['score']
+                result['Lexical_Resource'] = lex_result.get('total_score', lex_result.get('score', 0))
+                result['Task_Achievement'] = task_result['score']
+                
+                # Add brief combined feedback
                 combined_feedback = f"LC: {lc_result['feedback']}\n"
                 combined_feedback += f"COH: {coh_result['feedback']}\n"
                 combined_feedback += f"LEX: {lex_result['feedback']}\n"
@@ -415,6 +423,13 @@ with tab1:
                 result['Feedback'] = combined_feedback
             
             elif feedback_level == 'C':
+                # Add individual criterion scores
+                result['Language_Control'] = lc_result.get('total_score', lc_result.get('score', 0))
+                result['Coherence'] = coh_result['score']
+                result['Lexical_Resource'] = lex_result.get('total_score', lex_result.get('score', 0))
+                result['Task_Achievement'] = task_result['score']
+                
+                # Add detailed combined feedback
                 combined_feedback = f"Language Control: {lc_result['feedback']}\n\n"
                 combined_feedback += f"Coherence: {coh_result['feedback']}\n\n"
                 combined_feedback += f"Lexical Resource: {lex_result['feedback']}\n\n"
@@ -422,14 +437,19 @@ with tab1:
                 result['Feedback'] = combined_feedback
             
             elif feedback_level == 'D':
+                # Add detailed breakdown with base and bonus scores
                 result['Language_Control'] = lc_result.get('base_score', 0)
                 result['LC_Bonus'] = lc_result.get('bonus_score', 0)
+                result['LC_Total'] = lc_result.get('total_score', 0)
                 result['Coherence'] = coh_result['score']
                 result['Lexical_Resource'] = lex_result.get('base_score', 0)
                 result['LEX_Bonus'] = lex_result.get('bonus_score', 0)
+                result['LEX_Total'] = lex_result.get('total_score', 0)
                 result['Task_Achievement'] = task_result['score']
+                
                 if assessment_mode != 'General':
                     result['DLI_Vocab_Detected'] = lex_result.get('dli_items_detected', 0)
+                
                 result['Feedback'] = f"LC: {lc_result['feedback']}\n\nCOH: {coh_result['feedback']}\n\nLEX: {lex_result['feedback']}\n\nTA: {task_result['feedback']}"
                 
                 # Add bonus explanations if present
