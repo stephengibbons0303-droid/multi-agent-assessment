@@ -168,7 +168,7 @@ with st.sidebar:
     """)
 
 # Header
-st.title("📝 Multi-Agent Written Assessment Tool")
+st.title("📝 Written Assessment Tool")
 st.markdown("**CEFR A2/B1 Level • DLI-Enhanced Assessment • Module Testing**")
 
 # Prominent API Key input at top if not set
