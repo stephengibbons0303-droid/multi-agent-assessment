@@ -392,10 +392,10 @@ with tab1:
             # Lexical Resource: 20% (16% base + 4% bonus)
             # Task Achievement: 40%
             overall_score = (
-                agent_scores['Language Control'] * 0.20 +
-                agent_scores['Coherence'] * 0.20 +
-                agent_scores['Lexical Resource'] * 0.20 +
-                agent_scores['Task Achievement'] * 0.40
+                agent_scores['Language Control']  +
+                agent_scores['Coherence']  +
+                agent_scores['Lexical Resource']  +
+                agent_scores['Task Achievement'] 
             )
             
             # Prepare result based on feedback level
