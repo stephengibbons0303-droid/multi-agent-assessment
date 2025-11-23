@@ -201,7 +201,7 @@ tab1, tab2 = st.tabs(["📊 Full Assessment", "🔬 Module Testing"])
 # ============================================================================
 
 with tab1:
-    st.subheader("Full Multi-Agent Assessment")
+    st.subheader("Full Parallel Module Assessment")
     st.markdown("Process complete assessments with all four criteria evaluated")
     
     # Assessment Mode Selection
