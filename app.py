@@ -4,7 +4,6 @@ import os
 from io import StringIO
 import time
 import asyncio
-import streamlit.components.v1 as components
 from assessment_agents import (
     LanguageControlAgent, CoherenceAgent, LexicalResourceAgent,
     TaskAchievementAgent, VerifierAgent
@@ -196,333 +195,6 @@ def apply_feedback_tone_modifier(feedback_text, context_level, criterion_name):
     return modified
 
 
-def rotary_dial_component(current_value=5, min_value=0, max_value=10, key="grading_context"):
-    """
-    Luxury-style rotary dial for grading context selection.
-    Based on high-end audio equipment aesthetic.
-    """
-    
-    dial_html = f"""
-    <div id="rotary-container-{key}" style="
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        padding: 30px;
-        background: #0a0a0a;
-        border-radius: 20px;
-    ">
-        <div id="dial-wrapper-{key}" style="
-            position: relative;
-            width: 220px;
-            height: 220px;
-        ">
-            <div style="
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                border-radius: 50%;
-                background: 
-                    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.02) 0%, transparent 50%),
-                    #0f0f0f;
-                opacity: 0.8;
-            "></div>
-            
-            <svg style="
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-            " viewBox="0 0 220 220">
-                <g id="tick-marks-{key}"></g>
-                <text x="25" y="195" fill="rgba(255,255,255,0.5)" 
-                      font-size="11" font-family="Arial, sans-serif" 
-                      font-weight="300">min</text>
-                <text x="175" y="195" fill="rgba(255,255,255,0.5)" 
-                      font-size="11" font-family="Arial, sans-serif" 
-                      font-weight="300">max</text>
-            </svg>
-            
-            <div id="dial-{key}" style="
-                position: absolute;
-                top: 10px;
-                left: 10px;
-                width: 200px;
-                height: 200px;
-                border-radius: 50%;
-                background: linear-gradient(145deg, #1a1a1a 0%, #0d0d0d 100%);
-                cursor: grab;
-                box-shadow: 
-                    0 8px 32px rgba(0, 0, 0, 0.6),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-                    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
-                transition: box-shadow 0.2s ease;
-                filter: url(#organic-shape-{key});
-            ">
-                <div style="
-                    position: absolute;
-                    top: 12px;
-                    left: 12px;
-                    width: 176px;
-                    height: 176px;
-                    border-radius: 50%;
-                    background: radial-gradient(circle at 40% 40%, #1f1f1f 0%, #0a0a0a 100%);
-                    box-shadow: 
-                        inset 0 2px 8px rgba(0, 0, 0, 0.6),
-                        inset 0 -1px 2px rgba(255, 255, 255, 0.03);
-                "></div>
-                
-                <div id="indicator-{key}" style="
-                    position: absolute;
-                    top: 30px;
-                    left: 50%;
-                    width: 3px;
-                    height: 55px;
-                    background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 70%, transparent 100%);
-                    border-radius: 2px;
-                    transform-origin: bottom center;
-                    transform: translateX(-50%) rotate(0deg);
-                    transition: transform 0.15s cubic-bezier(0.4, 0.0, 0.2, 1);
-                    box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
-                "></div>
-            </div>
-            
-            <svg style="position: absolute; width: 0; height: 0;">
-                <defs>
-                    <filter id="organic-shape-{key}">
-                        <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" seed="1"/>
-                        <feDisplacementMap in="SourceGraphic" scale="3"/>
-                    </filter>
-                </defs>
-            </svg>
-        </div>
-        
-        <div style="margin-top: 25px; text-align: center;">
-            <div id="value-display-{key}" style="
-                font-size: 42px;
-                font-weight: 300;
-                color: #ffffff;
-                font-family: 'Helvetica Neue', 'Arial', sans-serif;
-                letter-spacing: 0.05em;
-                text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            ">{current_value}</div>
-            
-            <div id="context-label-{key}" style="
-                margin-top: 8px;
-                font-size: 13px;
-                font-weight: 300;
-                color: rgba(255, 255, 255, 0.6);
-                letter-spacing: 0.03em;
-                text-transform: uppercase;
-            "></div>
-        </div>
-        
-        <div style="
-            margin-top: 20px;
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.3);
-            text-align: center;
-            font-weight: 300;
-            letter-spacing: 0.05em;
-        ">DRAG TO ADJUST • SCROLL TO FINE-TUNE</div>
-    </div>
-    
-    <script>
-    (function() {{
-        const dial = document.getElementById('dial-{key}');
-        const indicator = document.getElementById('indicator-{key}');
-        const valueDisplay = document.getElementById('value-display-{key}');
-        const contextLabel = document.getElementById('context-label-{key}');
-        const tickMarksGroup = document.getElementById('tick-marks-{key}');
-        
-        let currentValue = {current_value};
-        let isDragging = false;
-        let lastAngle = 0;
-        
-        const contextLabels = [
-            'HIGH-STAKES',
-            'CERTIFICATION',
-            'FINAL EXAM',
-            'SUMMATIVE',
-            'MID-TERM',
-            'CLASSWORK',
-            'FORMATIVE',
-            'PROGRESS CHECK',
-            'DIAGNOSTIC',
-            'PRACTICE',
-            'SCREENING'
-        ];
-        
-        function drawTickMarks() {{
-            const cx = 110;
-            const cy = 110;
-            const radius = 105;
-            const startAngle = 150;
-            const totalAngle = 240;
-            const numTicks = 41;
-            
-            for (let i = 0; i <= numTicks; i++) {{
-                const angle = startAngle + (i * totalAngle / numTicks);
-                const rad = (angle - 90) * Math.PI / 180;
-                
-                const isMajor = (i % (numTicks / 2) === 0);
-                const tickLength = isMajor ? 10 : 5;
-                const tickWidth = isMajor ? 2 : 1;
-                const tickOpacity = isMajor ? 0.6 : 0.3;
-                
-                const x1 = cx + Math.cos(rad) * (radius - tickLength);
-                const y1 = cy + Math.sin(rad) * (radius - tickLength);
-                const x2 = cx + Math.cos(rad) * radius;
-                const y2 = cy + Math.sin(rad) * radius;
-                
-                const tick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                tick.setAttribute('x1', x1);
-                tick.setAttribute('y1', y1);
-                tick.setAttribute('x2', x2);
-                tick.setAttribute('y2', y2);
-                tick.setAttribute('stroke', `rgba(255, 255, 255, ${{tickOpacity}})`);
-                tick.setAttribute('stroke-width', tickWidth);
-                tick.setAttribute('stroke-linecap', 'round');
-                
-                tickMarksGroup.appendChild(tick);
-            }}
-        }}
-        
-        function updateDial(value) {{
-            value = Math.max({min_value}, Math.min({max_value}, Math.round(value)));
-            currentValue = value;
-            
-            const angle = 150 + (value / {max_value}) * 240;
-            indicator.style.transform = `translateX(-50%) rotate(${{angle}}deg)`;
-            
-            valueDisplay.textContent = value;
-            contextLabel.textContent = contextLabels[value];
-            
-            if (isDragging) {{
-                dial.style.boxShadow = `
-                    0 8px 40px rgba(255, 255, 255, 0.1),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-                    inset 0 -1px 0 rgba(0, 0, 0, 0.4)
-                `;
-            }} else {{
-                dial.style.boxShadow = `
-                    0 8px 32px rgba(0, 0, 0, 0.6),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-                    inset 0 -1px 0 rgba(0, 0, 0, 0.3)
-                `;
-            }}
-            
-            window.parent.postMessage({{
-                type: 'streamlit:setComponentValue',
-                key: '{key}',
-                value: value
-            }}, '*');
-        }}
-        
-        function getAngleFromMouse(e) {{
-            const rect = dial.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            const dx = e.clientX - centerX;
-            const dy = e.clientY - centerY;
-            let angle = Math.atan2(dy, dx) * 180 / Math.PI;
-            angle = (angle + 90 + 360) % 360;
-            return angle;
-        }}
-        
-        function handleMouseDown(e) {{
-            isDragging = true;
-            lastAngle = getAngleFromMouse(e);
-            dial.style.cursor = 'grabbing';
-            updateDial(currentValue);
-            e.preventDefault();
-        }}
-        
-        function handleMouseMove(e) {{
-            if (!isDragging) return;
-            
-            const currentAngle = getAngleFromMouse(e);
-            let delta = currentAngle - lastAngle;
-            
-            if (delta > 180) delta -= 360;
-            if (delta < -180) delta += 360;
-            
-            const valueChange = delta / 24;
-            updateDial(currentValue + valueChange);
-            
-            lastAngle = currentAngle;
-        }}
-        
-        function handleMouseUp() {{
-            isDragging = false;
-            dial.style.cursor = 'grab';
-            updateDial(currentValue);
-        }}
-        
-        function handleWheel(e) {{
-            e.preventDefault();
-            const delta = -Math.sign(e.deltaY);
-            updateDial(currentValue + delta);
-        }}
-        
-        dial.addEventListener('mousedown', handleMouseDown);
-        document.addEventListener('mousemove', handleMouseMove);
-        document.addEventListener('mouseup', handleMouseUp);
-        dial.addEventListener('wheel', handleWheel, {{ passive: false }});
-        
-        let touchStartAngle = 0;
-        
-        dial.addEventListener('touchstart', (e) => {{
-            const touch = e.touches[0];
-            isDragging = true;
-            
-            const rect = dial.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            const dx = touch.clientX - centerX;
-            const dy = touch.clientY - centerY;
-            touchStartAngle = Math.atan2(dy, dx) * 180 / Math.PI;
-            touchStartAngle = (touchStartAngle + 90 + 360) % 360;
-            
-            updateDial(currentValue);
-            e.preventDefault();
-        }}, {{ passive: false }});
-        
-        document.addEventListener('touchmove', (e) => {{
-            if (!isDragging) return;
-            
-            const touch = e.touches[0];
-            const rect = dial.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            const dx = touch.clientX - centerX;
-            const dy = touch.clientY - centerY;
-            let currentAngle = Math.atan2(dy, dx) * 180 / Math.PI;
-            currentAngle = (currentAngle + 90 + 360) % 360;
-            
-            let delta = currentAngle - touchStartAngle;
-            if (delta > 180) delta -= 360;
-            if (delta < -180) delta += 360;
-            
-            const valueChange = delta / 24;
-            updateDial(currentValue + valueChange);
-            
-            touchStartAngle = currentAngle;
-        }}, {{ passive: false }});
-        
-        document.addEventListener('touchend', handleMouseUp);
-        
-        drawTickMarks();
-        updateDial(currentValue);
-    }})();
-    </script>
-    """
-    
-    result = components.html(dial_html, height=450)
-    return result if result is not None else current_value
 
 
 # Initialize session state
@@ -778,18 +450,36 @@ with tab1:
 *Based on calibration data: AI scores ~18 points lower than human expert on average*
         """)
     
-    # Rotary dial component
-    context_value = rotary_dial_component(
-        current_value=st.session_state.context_level,
+    # Grading context slider
+    context_level = st.slider(
+        "Context Level",
         min_value=0,
         max_value=10,
-        key="grading_context_dial"
+        value=st.session_state.context_level,
+        step=1,
+        key='context_slider',
+        help="0=High-Stakes (strict), 5=Regular (balanced), 10=Formative (supportive)"
     )
+    st.session_state.context_level = context_level
     
-    # Update session state if dial changed
-    if context_value is not None and context_value != st.session_state.context_level:
-        st.session_state.context_level = context_value
-        st.rerun()
+    # Quick preset buttons
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        if st.button("High-Stakes (0)", key="ctx_0"):
+            st.session_state.context_level = 0
+            st.rerun()
+    with col2:
+        if st.button("Mid-Term (4)", key="ctx_4"):
+            st.session_state.context_level = 4
+            st.rerun()
+    with col3:
+        if st.button("Classwork (5)", key="ctx_5"):
+            st.session_state.context_level = 5
+            st.rerun()
+    with col4:
+        if st.button("Diagnostic (8)", key="ctx_8"):
+            st.session_state.context_level = 8
+            st.rerun()
     
     # Display context description
     context_descriptions = {
