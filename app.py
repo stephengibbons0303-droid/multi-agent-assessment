@@ -1139,8 +1139,277 @@ with tab2:
     st.subheader("Module Testing")
     st.markdown("Test individual assessment agents in isolation")
     
-    # (Module testing tab remains unchanged from original)
-    st.info("Module testing tab - implementation same as original")
+    # Module Selection
+    st.markdown("### Select Module to Test")
+    module_options = {
+        'Language Control': 'Grammar, syntax, and mechanics (16% base + 4% bonus)',
+        'Coherence and Cohesion': 'Organization and logical flow (20%)',
+        'Lexical Resource': 'Vocabulary range and precision (16% base + 4% bonus)',
+        'Task Achievement': 'Response to prompt (40%)',
+        'Verifier': 'Score consistency checking'
+    }
+    
+    selected_module = st.selectbox(
+        "Choose an agent to test:",
+        options=list(module_options.keys()),
+        format_func=lambda x: f"{x} - {module_options[x]}",
+        key='tab2_module'
+    )
+    
+    st.info(f"**Testing:** {selected_module}")
+    
+    # DLI Configuration for applicable modules
+    tab2_dli_items = []
+    tab2_assessment_mode = 'General'
+    
+    if selected_module in ['Language Control', 'Lexical Resource']:
+        st.markdown("---")
+        st.markdown("### DLI Configuration (Optional)")
+        
+        enable_dli = st.checkbox("Enable DLI scanning for this module", key='tab2_enable_dli')
+        
+        if enable_dli:
+            dli_mode_choice = st.radio(
+                "DLI Mode:",
+                options=['Closed DLI', 'Open DLI'],
+                key='tab2_dli_mode'
+            )
+            tab2_assessment_mode = dli_mode_choice
+            
+            if dli_mode_choice == 'Closed DLI':
+                available_books = load_dli_books()
+                if available_books:
+                    book_options = [''] + list(available_books.keys())
+                    tab2_selected_book = st.selectbox("Choose DLI book:", options=book_options, key='tab2_book')
+                    if tab2_selected_book:
+                        tab2_dli_items = available_books[tab2_selected_book]
+                        st.success(f"✓ Loaded {len(tab2_dli_items)} items from {tab2_selected_book}")
+            
+            elif dli_mode_choice == 'Open DLI':
+                tab2_dli_file = st.file_uploader("Upload custom DLI list:", type=['csv'], key='tab2_dli_file')
+                if tab2_dli_file:
+                    try:
+                        dli_df = pd.read_csv(tab2_dli_file)
+                        tab2_dli_items = dli_df.to_dict('records')
+                        st.success(f"✓ Loaded {len(tab2_dli_items)} custom DLI items")
+                    except Exception as e:
+                        st.error(f"Error reading DLI file: {e}")
+    
+    # Feedback Level
+    st.markdown("---")
+    st.markdown("### Feedback Detail")
+    tab2_feedback = st.radio(
+        "Select feedback level:",
+        options=['A', 'B', 'C', 'D'],
+        format_func=lambda x: {'A': 'Score only', 'B': 'Brief', 'C': 'Detailed', 'D': 'Full'}[x],
+        horizontal=True,
+        key='tab2_feedback'
+    )
+    
+    # File Upload
+    st.markdown("---")
+    st.markdown("### Upload Test Batch")
+    st.markdown("**CSV format: Student_ID, Question_Prompt, Student_Response**")
+    tab2_uploaded = st.file_uploader("Choose CSV file", type=['csv'], key='tab2_upload')
+    
+    tab2_submissions = None
+    if tab2_uploaded:
+        st.success(f"✓ Uploaded: {tab2_uploaded.name}")
+        try:
+            tab2_submissions = pd.read_csv(tab2_uploaded)
+            with st.expander("📋 Preview Test Data"):
+                st.dataframe(tab2_submissions.head(), use_container_width=True)
+                st.info(f"Total submissions: {len(tab2_submissions)}")
+        except Exception as e:
+            st.error(f"Error reading file: {e}")
+    
+    # Process Module Testing
+    def process_module_testing(df, api_key, selected_module, feedback_level, dli_items, assessment_mode):
+        """Process batch through selected module only"""
+        
+        # Initialize the selected agent
+        if selected_module == 'Language Control':
+            agent = LanguageControlAgent(api_key)
+            grammar_scanner = GrammarScanningSub() if dli_items else None
+        elif selected_module == 'Coherence and Cohesion':
+            agent = CoherenceAgent(api_key)
+        elif selected_module == 'Lexical Resource':
+            agent = LexicalResourceAgent(api_key)
+            vocab_scanner = VocabularyScanningSub() if dli_items else None
+        elif selected_module == 'Task Achievement':
+            agent = TaskAchievementAgent(api_key)
+        elif selected_module == 'Verifier':
+            agent = VerifierAgent(api_key)
+        
+        results = []
+        progress_bar = st.progress(0)
+        status_text = st.empty()
+        
+        total = len(df)
+        errors = 0
+        
+        for idx, row in df.iterrows():
+            student_id = row['Student_ID']
+            prompt = row['Question_Prompt']
+            response = row['Student_Response']
+            
+            status_text.text(f"Testing {idx+1}/{total}: Student {student_id}")
+            
+            try:
+                if selected_module == 'Language Control':
+                    grammar_scan = grammar_scanner.scan(response, dli_items) if grammar_scanner else None
+                    result = agent.assess(response, feedback_level, grammar_scan)
+                    
+                    output = {
+                        'Student_ID': student_id,
+                        'Base_Score': result.get('base_score', result.get('score', 0)),
+                        'Bonus_Score': result.get('bonus_score', 0),
+                        'Total_Score': result.get('total_score', result.get('score', 0)),
+                        'Feedback': result.get('feedback', '')
+                    }
+                    if result.get('bonus_explanation'):
+                        output['Bonus_Note'] = result['bonus_explanation']
+                
+                elif selected_module == 'Lexical Resource':
+                    vocab_scan = vocab_scanner.scan(response, dli_items) if vocab_scanner else None
+                    result = agent.assess(response, feedback_level, vocab_scan, assessment_mode)
+                    
+                    output = {
+                        'Student_ID': student_id,
+                        'Base_Score': result.get('base_score', result.get('score', 0)),
+                        'Bonus_Score': result.get('bonus_score', 0),
+                        'Total_Score': result.get('total_score', result.get('score', 0)),
+                        'DLI_Detected': result.get('dli_items_detected', 0),
+                        'Feedback': result.get('feedback', '')
+                    }
+                    if result.get('bonus_explanation'):
+                        output['Bonus_Note'] = result['bonus_explanation']
+                
+                elif selected_module in ['Coherence and Cohesion', 'Task Achievement']:
+                    if selected_module == 'Coherence and Cohesion':
+                        result = agent.assess(response, feedback_level)
+                    else:
+                        # Calculate word count for Task Achievement
+                        word_count = len(response.split())
+                        result = agent.assess(response, prompt, feedback_level, word_count)
+                    
+                    output = {
+                        'Student_ID': student_id,
+                        'Score': result['score'],
+                        'Feedback': result.get('feedback', '')
+                    }
+                    
+                    # Add word count to output for Task Achievement
+                    if selected_module == 'Task Achievement':
+                        output['Word_Count'] = word_count
+                
+                elif selected_module == 'Verifier':
+                    # For verifier, we need mock scores to test
+                    mock_scores = {
+                        'Language Control': 15,
+                        'Coherence': 16,
+                        'Lexical Resource': 14,
+                        'Task Achievement': 32
+                    }
+                    result = agent.verify(response, mock_scores, feedback_level)
+                    
+                    output = {
+                        'Student_ID': student_id,
+                        'Anomalies_Detected': result['anomalies_detected'],
+                        'Score_Spread': result['score_spread'],
+                        'Anomalies': '; '.join(result['anomalies']) if result['anomalies'] else 'None'
+                    }
+                
+                results.append(output)
+                
+            except Exception as e:
+                results.append({
+                    'Student_ID': student_id,
+                    'Error': str(e)
+                })
+                errors += 1
+            
+            progress_bar.progress((idx + 1) / total)
+        
+        status_text.text(f"✅ Module testing complete! {total - errors}/{total} successful")
+        return pd.DataFrame(results), errors
+    
+    # Run Module Test Button
+    st.markdown("---")
+    col1, col2 = st.columns([3, 1])
+    
+    with col1:
+        if st.button("🧪 Run Module Test", use_container_width=True, type="primary", key='tab2_run'):
+            errors = []
+            
+            if not st.session_state.api_key:
+                errors.append("⚠️ Please enter your OpenAI API key")
+            if not tab2_uploaded:
+                errors.append("⚠️ Please upload a test batch file")
+            
+            if errors:
+                for error in errors:
+                    st.error(error)
+            else:
+                st.success("✓ Validation passed!")
+                st.info(f"""**Module Test Configuration:**
+- Module: {selected_module}
+- Feedback Level: Option {tab2_feedback}
+- DLI Mode: {tab2_assessment_mode}""")
+                
+                with st.spinner(f"🔄 Testing {selected_module} module..."):
+                    start_time = time.time()
+                    
+                    module_results, error_count = process_module_testing(
+                        tab2_submissions,
+                        st.session_state.api_key,
+                        selected_module,
+                        tab2_feedback,
+                        tab2_dli_items,
+                        tab2_assessment_mode
+                    )
+                    
+                    elapsed_time = time.time() - start_time
+                    
+                    st.session_state.module_results_df = module_results
+                    
+                    if error_count > 0:
+                        st.warning(f"⚠️ {error_count} test(s) failed")
+                    
+                    st.success(f"✅ Module test complete in {elapsed_time:.1f} seconds!")
+    
+    with col2:
+        if st.button("⬇️ Download", use_container_width=True, key='tab2_download'):
+            if st.session_state.module_results_df is not None:
+                csv = st.session_state.module_results_df.to_csv(index=False)
+                st.download_button(
+                    label="📥 Download CSV",
+                    data=csv,
+                    file_name=f"{selected_module.lower().replace(' ', '_')}_test_results.csv",
+                    mime="text/csv",
+                    key='tab2_download_btn'
+                )
+            else:
+                st.info("No results to download yet")
+    
+    # Display Module Test Results
+    if st.session_state.module_results_df is not None:
+        st.markdown("---")
+        st.markdown(f"### 🔬 {selected_module} Test Results")
+        st.dataframe(st.session_state.module_results_df, use_container_width=True)
+        
+        # Module-specific statistics
+        if 'Score' in st.session_state.module_results_df.columns:
+            avg_score = st.session_state.module_results_df['Score'].mean()
+            st.metric("Average Score", f"{avg_score:.1f}")
+        elif 'Total_Score' in st.session_state.module_results_df.columns:
+            avg_total = st.session_state.module_results_df['Total_Score'].mean()
+            avg_bonus = st.session_state.module_results_df['Bonus_Score'].mean()
+            col1, col2 = st.columns(2)
+            with col1:
+                st.metric("Average Total Score", f"{avg_total:.1f}")
+            with col2:
+                st.metric("Average Bonus", f"{avg_bonus:.1f}")
 
 # Footer
 st.markdown("---")
