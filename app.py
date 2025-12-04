@@ -214,9 +214,9 @@ if 'module_results_df' not in st.session_state:
 # API Key Configuration
 if 'api_key' not in st.session_state:
     try:
-        st.session_state.api_key = st.secrets.get("OPENAI_API_KEY", "")
+        st.session_state.api_key = st.secrets.get("ANTHROPIC_API_KEY", "")
     except:
-        st.session_state.api_key = os.getenv('OPENAI_API_KEY', '')
+        st.session_state.api_key = os.getenv('ANTHROPIC_API_KEY', '')
 
 # Load DLI books data
 @st.cache_data
