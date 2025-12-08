@@ -212,7 +212,8 @@ if 'module_results_df' not in st.session_state:
     st.session_state.module_results_df = None
 
 # API Key Configuration
-if 'api_key' not in st.session_state:
+# API Key Configuration
+if 'api_key' not in st.session_state or not st.session_state.api_key:
     try:
         st.session_state.api_key = st.secrets.get("OPENAI_API_KEY", "")
     except:
